@@ -19,10 +19,12 @@ func main() {
 
 	todos := []Todo{}
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(fiber.Map{"message": "Hello, World!"})
+	app.Get("/api/todos", func(c *fiber.Ctx) error {
+		return c.Status(200).JSON(todos)
 	})
 
+
+	// Get all todos
 	app.Post("/api/todos", func(c *fiber.Ctx) error {
 		todo := &Todo{} // {ID: 0, Completed: false, Body: ""}
 		if err := c.BodyParser(todo); err != nil {
@@ -36,7 +38,32 @@ func main() {
 		todo.ID = len(todos) + 1
 		todos = append(todos, *todo)
 
+
 		return c.Status(201).JSON(todo)
+	})
+
+	// Update a todo
+	app.Patch("/api/todos/:id", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+		for i, todo := range todos {
+			if fmt.Sprint(todo.ID) == id {
+				todos[i].Completed = true
+				return c.Status(200).JSON(todos[i])
+			}
+		}
+		return c.Status(404).JSON(fiber.Map{"error": "Todo not found"})
+	})
+
+	//Delete a todo
+	app.Delete("/api/todos/:id", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+		for i, todo := range todos {
+			if fmt.Sprint(todo.ID) == id {
+				todos = append(todos[:i], todos[i+1:]...)
+				return c.Status(200).JSON(fiber.Map{"success": "true"})
+			}
+		}
+		return c.Status(404).JSON(fiber.Map{"error": "Todo not found"})
 	})
 
 	log.Fatal(app.Listen(":4000"))
