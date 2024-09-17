@@ -30,3 +30,4 @@ tmp/build-errors.log
 *.out
 
 # Dependency directories (remove the comment below if you are using dep)tmp/build-errors.log
+.vercel
