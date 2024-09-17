@@ -12,7 +12,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     mutationFn: async () => {
       if (todo.completed) return alert("Todo already completed!");
       try {
-        const res = await fetch(BASE_URL + `todos/${todo._id}`, {
+        const res = await fetch(BASE_URL + `/todos/${todo._id}`, {
           method: "PATCH",
         });
 
@@ -33,7 +33,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     mutationKey: ["deleteTodo"],
     mutationFn: async () => {
       try {
-        const res = await fetch(BASE_URL + `todos/${todo._id}`, {
+        const res = await fetch(BASE_URL + `/todos/${todo._id}`, {
           method: "DELETE",
         });
         const data = await res.json();
