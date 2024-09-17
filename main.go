@@ -32,7 +32,12 @@ func main() {
 		log.Fatal("Error loading .env file:", err)
 	}
 }
-	MONGODB_URI := os.Getenv("MONGODB_URI")
+MONGODB_URI := os.Getenv("MONGODB_URI")  // Fetch the MongoDB connection string
+PORT := os.Getenv("PORT")                // Fetch the PORT value
+
+if MONGODB_URI == "" || PORT == "" {
+	log.Fatal("MONGODB_URI or PORT environment variables not set!")
+}
 	clientOptions := options.Client().ApplyURI(MONGODB_URI)
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
